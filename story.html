@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emma的學習冒險</title>
+    <style>
+        /* --- 基本樣式 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9f5e7;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- 導航欄 --- */
+        header {
+            background-color: #8fc0a9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffd5c2;
+        }
+
+        .burger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        /* --- 主要內容 --- */
+        main {
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #68b0ab;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #555;
+        }
+
+        /* --- 故事部分 --- */
+        .story-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .story-page {
+            display: none;
+            margin-bottom: 50px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            transition: all 0.5s ease;
+        }
+
+        .story-page.active {
+            display: block;
+            animation: fadeIn 1s;
+        }
+
+        .story-page .text-content {
+            margin-bottom: 20px;
+        }
+
+        .story-page h2 {
+            color: #68b0ab;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .story-page p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .story-page .image-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .story-page .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .story-page .image-container img:hover {
+            transform: scale(1.03);
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background-color: #8fc0a9;
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: #68b0ab;
+        }
+
+        .nav-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .page-indicator {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .page-dot.active {
+            background-color: #8fc0a9;
+        }
+
+        /* --- 頁腳 --- */
+        footer {
+            background-color: #8fc0a9;
+            color: #fff;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #ffd5c2;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            margin-right: 15px;
+            color: #fff;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #ffd5c2;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+
+        /* --- 動畫 --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 響應式設計 --- */
+        @media screen and (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                right: 0;
+                height: 0;
+                top: 70px;
+                background-color: #8fc0a9;
+                flex-direction: column;
+                width: 100%;
+                overflow: hidden;
+                transition: height 0.5s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                height: 300px;
+            }
+
+            .nav-links li {
+                margin: 0;
+                padding: 15px 20px;
+                width: 100%;
+                text-align: center;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            .nav-links.active li {
+                opacity: 1;
+            }
+
+            .burger {
+                display: block;
+            }
+
+            .burger.active div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .burger.active div:nth-child(2) {
+                opacity: 0;
+            }
+
+            .burger.active div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .story-page {
+                padding: 20px;
+            }
+
+            .story-page h2 {
+                font-size: 1.5rem;
+            }
+
+            .story-page p {
+                font-size: 1rem;
+            }
+
+            .story-page .image-container {
+                height: 300px;
+            }
+
+            .footer-section {
+                flex: 100%;
+                text-align: center;
+            }
+
+            .social-icons {
+                display: flex;
+                justify-content: center;
+                margin-top: 10px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .nav-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .story-page .image-container {
+                height: 200px;
+            }
+
+            .page-dot {
+                height: 10px;
+                width: 10px;
+                margin: 0 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Emma的學習冒險</a>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">首頁</a></li>
+                    <li><a href="#story">故事</a></li>
+                    <li><a href="#about">關於Emma</a></li>
+                    <li><a href="#contact">聯絡我們</a></li>
+                </ul>
+                <div class="burger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要內容 -->
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>跟著Emma一起出發冒險吧！</h1>
+                <p>一個關於學習、勇氣和友誼的美麗故事</p>
+            </section>
+
+            <div id="story" class="story-container">
+                <!-- 第1頁 -->
+                <div class="story-page active" id="page1">
+                    <div class="text-content">
+                        <h2>第一章：準備出發</h2>
+                        <p>一個名叫Emma的女孩，穿著校服，戴著眼鏡，有著烏黑的直髮，性格害羞但聰明，喜歡閱讀和解決問題。Emma是個好奇的小女孩。今天，她決定開始一次學習冒險，探索這個美妙的世界。她在家裡找到了自己的背包，準備出發。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image1.jpg" alt="Emma準備出發冒險">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn" disabled>上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第2頁 -->
+                <div class="story-page" id="page2">
+                    <div class="text-content">
+                        <h2>第二章：與兔子相遇</h2>
+                        <p>Emma走進森林，遇見了一隻小兔子。她學會了如何耐心地觀察動物，以及如何與它們和平相處。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image2.jpg" alt="Emma遇見小兔子">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第3頁 -->
+                <div class="story-page" id="page3">
+                    <div class="text-content">
+                        <h2>第三章：學習數數</h2>
+                        <p>Emma在森林裡找到了五個美麗的蘋果。她開始數著它們，學會了認識數字。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image3.jpg" alt="Emma學習數數">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第4頁 -->
+                <div class="story-page" id="page4">
+                    <div class="text-content">
+                        <h2>第四章：發現形狀與顏色</h2>
+                        <p>Emma發現了不同形狀和顏色的石頭。她學會了認識圓形、正方形和三角形，以及紅色、藍色和黃色。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image4.jpg" alt="Emma學習形狀和顏色">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第5頁 -->
+                <div class="story-page" id="page5">
+                    <div class="text-content">
+                        <h2>第五章：團隊合作</h2>
+                        <p>Emma遇見了一隻需要幫忙收集樹枝的小狐狸。Emma學會了團隊合作的價值，兩個朋友一起合作完成了任務。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image5.jpg" alt="Emma和小狐狸合作">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第6頁 -->
+                <div class="story-page" id="page6">
+                    <div class="text-content">
+                        <h2>第六章：勇氣的橋樑</h2>
+                        <p>Emma來到一座看起來有點搖晃的小橋前。她感到害怕，但鼓起勇氣慢慢地走過去，成功地到達了另一邊。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image6.jpg" alt="Emma勇敢過橋">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第7頁 -->
+                <div class="story-page" id="page7">
+                    <div class="text-content">
+                        <h2>第七章：感謝自然</h2>
+                        <p>在一片美麗的草地上，Emma感謝大自然的美麗。她學會了欣賞自然資源，理解感恩的重要性。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image7.jpg" alt="Emma感謝大自然">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第8頁 -->
+                <div class="story-page" id="page8">
+                    <div class="text-content">
+                        
+                        <h2>第八章：時間管理</h2>
+                        <p>Emma注意到天色漸暗，她知道是時候回家了。她學會了如何管理時間，不拖延。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image8.jpg" alt="Emma注意到天色變暗">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第9頁 -->
+                <div class="story-page" id="page9">
+                    <div class="text-content">
+                        <h2>第九章：分享的喜悅</h2>
+                        <p>Emma把一些水果帶回家，決定與家人分享。他們一起享用水果，感受到分享的喜悅。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image9.jpg" alt="Emma與家人分享水果">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn">下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 第10頁 -->
+                <div class="story-page" id="page10">
+                    <div class="text-content">
+                        <h2>第十章：回顧與期待</h2>
+                        <p>當Emma回到家，她整理了當天的冒險日記，反思了她所學到的一切。她感到快樂，並期待著下一次的冒險。</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="image10.jpg" alt="Emma整理冒險日記">
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn">上一頁</button>
+                        <button class="nav-btn" id="nextBtn" disabled>下一頁</button>
+                    </div>
+                </div>
+
+                <!-- 分頁指示器 -->
+                <div class="page-indicator">
+                    <span class="page-dot active" data-page="1"></span>
+                    <span class="page-dot" data-page="2"></span>
+                    <span class="page-dot" data-page="3"></span>
+                    <span class="page-dot" data-page="4"></span>
+                    <span class="page-dot" data-page="5"></span>
+                    <span class="page-dot" data-page="6"></span>
+                    <span class="page-dot" data-page="7"></span>
+                    <span class="page-dot" data-page="8"></span>
+                    <span class="page-dot" data-page="9"></span>
+                    <span class="page-dot" data-page="10"></span>
+                </div>
+            </div>
+
+            <section id="about" class="about-section">
+                <h2>關於Emma</h2>
+                <p>Emma是一個充滿好奇心和求知慾的小女孩。她喜歡探索世界，學習新知識，結交新朋友。通過Emma的冒險故事，孩子們可以學習到許多重要的生活技能和價值觀。</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>關於我們</h3>
+                    <p>我們致力於創作有教育意義且充滿樂趣的兒童故事，幫助孩子們從小培養良好的人生觀和價值觀。</p>
+                </div>
+                <div class="footer-section">
+                    <h3>聯絡我們</h3>
+                    <p id="contact">Email: info@emmasadventure.com</p>
+                    <p>電話: (02) 1234-5678</p>
+                </div>
+                <div class="footer-section">
+                    <h3>更多資源</h3>
+                    <ul>
+                        <li><a href="#">Emma的其他冒險</a></li>
+                        <li><a href="#">兒童教育資源</a></li>
+                        <li><a href="#">父母指南</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>關注我們</h3>
+                    <div class="social-icons">
+                        <a href="#">FB</a>
+                        <a href="#">IG</a>
+                        <a href="#">YT</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Emma的學習冒險。保留所有權利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 漢堡菜單
+        const burger = document.querySelector('.burger');
+        const nav = document.querySelector('.nav-links');
+        const navLinks = document.querySelectorAll('.nav-links li');
+
+        burger.addEventListener('click', () => {
+            // 切換導航菜單
+            nav.classList.toggle('active');
+            burger.classList.toggle('active');
+
+            // 導航鏈接動畫
+            navLinks.forEach((link, index) => {
+                if (link.style.animation) {
+                    link.style.animation = '';
+                } else {
+                    link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
+                }
+            });
+        });
+
+        // 故事頁面導航
+        const pages = document.querySelectorAll('.story-page');
+        const dots = document.querySelectorAll('.page-dot');
+        let currentPage = 1;
+        const totalPages = pages.length;
+
+        // 更新頁面顯示
+        function updatePage() {
+            // 隱藏所有頁面
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 顯示當前頁面
+            document.getElementById(`page${currentPage}`).classList.add('active');
+            
+            // 更新分頁指示器
+            dots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+            dots[currentPage - 1].classList.add('active');
+            
+            // 更新按鈕狀態
+            const prevButtons = document.querySelectorAll('#prevBtn');
+            const nextButtons = document.querySelectorAll('#nextBtn');
+            
+            prevButtons.forEach(btn => {
+                btn.disabled = currentPage === 1;
+            });
+            
+            nextButtons.forEach(btn => {
+                btn.disabled = currentPage === totalPages;
+            });
+            
+            // 平滑滾動到故事容器頂部
+            document.querySelector('.story-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 設置下一頁按鈕事件
+        document.querySelectorAll('#nextBtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePage();
+                }
+            });
+        });
+
+        // 設置上一頁按鈕事件
+        document.querySelectorAll('#prevBtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePage();
+                }
+            });
+        });
+
+        // 設置分頁點擊事件
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                currentPage = parseInt(dot.getAttribute('data-page'));
+                updatePage();
+            });
+        });
+
+        // 鍵盤導航
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentPage < totalPages) {
+                currentPage++;
+                updatePage();
+            } else if (e.key === 'ArrowLeft' && currentPage > 1) {
+                currentPage--;
+                updatePage();
+            }
+        });
+
+        // 滾動動畫
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (sectionTop < windowHeight * 0.8) {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // 圖片載入動畫
+        const images = document.querySelectorAll('.image-container img');
+        
+        images.forEach(img => {
+            img.addEventListener('load', () => {
+                img.style.opacity = '1';
+            });
+        });
+
+        // 平滑滾動到錨點
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // 如果是在手機版，點擊後關閉菜單
+                    if (window.innerWidth <= 768 && nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        burger.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // 頁面載入完成後初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            updatePage();
+            
+            // 添加頁面載入動畫
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>
